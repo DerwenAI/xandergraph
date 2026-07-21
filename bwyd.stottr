@@ -45,27 +45,36 @@ bwyd:RecipeDepends[
 
 
 bwyd:Closure[
-    ! ottr:IRI ?urn,
+    ! ottr:IRI ?closure,
     ?title,
     ?definition,
 ] :: {
-    ottr:Triple( ?urn, rdf:type, bwyd:Closure ),
-    ottr:Triple( ?urn, dcterms:title, ?title ),
-    ottr:Triple( ?urn, skos:definition ?definition ),
+    ottr:Triple( ?closure, rdf:type, bwyd:Closure ),
+    ottr:Triple( ?closure, dcterms:title, ?title ),
+    ottr:Triple( ?closure, skos:definition ?definition ),
 } .
 
 bwyd:ClosureConsumes[
-    ! ottr:IRI ?urn,
+    ! ottr:IRI ?closure,
     ?ingredient,
 ] :: {
-    ottr:Triple( ?urn, rdf:type, bwyd:Closure ),
-    ottr:Triple( ?urn, bwyd:consumes, ?ingredient ),
+    ottr:Triple( ?closure, rdf:type, bwyd:Closure ),
+    ottr:Triple( ?closure, bwyd:consumes, ?ingredient ),
 } .
 
 bwyd:ClosureProduces[
-    ! ottr:IRI ?urn,
+    ! ottr:IRI ?closure,
     ?product,
 ] :: {
-    ottr:Triple( ?urn, rdf:type, bwyd:Closure ),
-    ottr:Triple( ?urn, bwyd:produces, ?product ),
+    ottr:Triple( ?closure, rdf:type, bwyd:Closure ),
+    ottr:Triple( ?closure, bwyd:produces, ?product ),
+} .
+
+
+bwyd:Product[
+    ! ottr:IRI ?product,
+    ?label,
+] :: {
+    ottr:Triple( ?product, rdf:type, bwyd:Product ),
+    ottr:Triple( ?product, skos:prefLabel, ?label ),
 } .

@@ -5,8 +5,11 @@
 Test usage of pyOTTR
 """
 
+import fileinput
+import os
 import pathlib
 import sys
+import tempfile
 
 from icecream import ic
 import xandergraph as xg
@@ -91,45 +94,76 @@ bwyd:Closure(
 
 bwyd:ClosureConsumes(
   <urn:bwyd:pacoid:panna_cotta/closure_2> ,
-  <urn:bwyd:pacoid:panna_cotta/closure_1/product/filling> .
+  <urn:bwyd:pacoid:panna_cotta/closure_1/product/filling> ,
 ) .
 
 bwyd:ClosureProduces(
   <urn:bwyd:pacoid:panna_cotta/closure_2> ,
-  <urn:bwyd:pacoid:product:panna_cotta> .
+  <urn:bwyd:pacoid:product:panna_cotta> ,
+) .
+
+
+bwyd:Product(
+  <urn:bwyd:pacoid:panna_cotta/closure_1/product/filling> ,
+  "filling"@en ,
+) .
+
+bwyd:Product(
+  <urn:bwyd:pacoid:product:panna_cotta> ,
+  "panna_cotta"@en ,
 ) .
     """.strip()
 
     kg.gen_ottr_rdf(rdf_data)
 
-#  rdfs:subClassOf <urn:bwyd:subject:dessert> , <urn:bwyd:subject:pudding> ;
-#  skos:related <urn:bwyd:keyword:italian> ;
+# need to add programmatically:
+#   rdfs:subClassOf <urn:bwyd:subject:dessert> , <urn:bwyd:subject:pudding> ;
+#   skos:related <urn:bwyd:keyword:italian> ;
 
 
-    ## save to a file
-
+    ## save generated RDF to a file
     ttl_path: pathlib.Path = pathlib.Path("corpus.ttl")
 
     with open(ttl_path, "w", encoding = "utf-8") as fp:
         ttl: str = kg.graph.serialize(format = "turtle")
         fp.write(ttl)
 
-    ## SHACL validation
-    data_graph = "corpus.ttl"
-    shacl_graph = "shapes.ttl"
-    ont_graph = "domain.ttl"
+
+    ## check for RDF syntax errors within the data graph
+    file_list: list[ str ] = [
+        "corpus.ttl",
+        "search.ttl",
+        "pantry.ttl",
+    ]
 
     graph: rdflib.Graph = rdflib.Graph()
-    graph.parse(data_graph)
-    graph.parse(shacl_graph)
-    graph.parse(ont_graph)
 
-    #sys.exit(0)
+    for ttl_file in file_list:
+        print(ttl_file)
+        graph.parse(ttl_file)
 
-    r = pyshacl.validate(
-        data_graph,
-        shacl_graph = shacl_graph,
-        ont_graph = ont_graph,
+    tf: tempfile.NamedTemporaryFile = tempfile.NamedTemporaryFile(
+        delete = False,
+        suffix = ".ttl",
+    )
+
+    with open(tf.name, "w", encoding = "utf-8") as fp:
+        with fileinput.input(files = file_list, encoding = "utf-8") as stream:
+            for line in stream:
+                fp.write(line)
+
+    tf.close()
+    print(tf.name)
+
+    graph = rdflib.Graph()
+    graph.parse(tf.name)
+
+
+    ## SHACL validation
+    conforms, results_graph, results_text = pyshacl.validate(
+        tf.name,
+        shacl_graph = "shapes.ttl",
+        ont_graph = "domain.ttl",
         inference = "rdfs",
         abort_on_first = False,
         allow_infos = False,
@@ -140,5 +174,7 @@ bwyd:ClosureProduces(
         debug = False,
     )
 
-    conforms, results_graph, results_text = r
-    ic(conforms, results_graph, results_text)
+    print(results_text)
+
+    tf.close()
+    os.unlink(tf.name)
