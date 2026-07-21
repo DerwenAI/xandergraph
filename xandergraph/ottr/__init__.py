@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Package definitions for the `xandergraph` library.
+Package definitions for the `pyOTTR` library.
 see copyright/license https://github.com/DerwenAI/xandergraph/README.md
 """
 
