@@ -54,6 +54,22 @@ bwyd:Closure[
     ottr:Triple( ?closure, skos:definition ?definition ),
 } .
 
+bwyd:ClosureSuper[
+    ! ottr:IRI ?closure,
+    ?super,
+] :: {
+    ottr:Triple( ?closure, rdf:type, bwyd:Closure ),
+    ottr:Triple( ?closure, rdfs:subClassOf, ?super ),
+} .
+
+bwyd:ClosureKeyword[
+    ! ottr:IRI ?closure,
+    ?keyword,
+] :: {
+    ottr:Triple( ?closure, rdf:type, bwyd:Closure ),
+    ottr:Triple( ?closure, skos:related, ?keyword ),
+} .
+
 bwyd:ClosureConsumes[
     ! ottr:IRI ?closure,
     ?ingredient,
@@ -68,6 +84,24 @@ bwyd:ClosureProduces[
 ] :: {
     ottr:Triple( ?closure, rdf:type, bwyd:Closure ),
     ottr:Triple( ?closure, bwyd:produces, ?product ),
+} .
+
+
+bwyd:Super[
+    ! ottr:IRI ?super,
+    ?label,
+] :: {
+    ottr:Triple( ?super, rdf:type, bwyd:Super ),
+    ottr:Triple( ?super, skos:prefLabel, ?label ),
+} .
+
+
+bwyd:Keyword[
+    ! ottr:IRI ?keyword,
+    ?label,
+] :: {
+    ottr:Triple( ?keyword, rdf:type, bwyd:Keyword ),
+    ottr:Triple( ?keyword, skos:prefLabel, ?label ),
 } .
 
 

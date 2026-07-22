@@ -91,6 +91,21 @@ bwyd:Closure(
   "Fill the ramekins and chill"@en ,
 ) .
 
+bwyd:ClosureSuper(
+  <urn:bwyd:pacoid:panna_cotta/closure_2> ,
+  <urn:bwyd:super:dessert> ,
+) .
+
+bwyd:ClosureSuper(
+  <urn:bwyd:pacoid:panna_cotta/closure_2> ,
+  <urn:bwyd:super:pudding> ,
+) .
+
+bwyd:ClosureKeyword(
+  <urn:bwyd:pacoid:panna_cotta/closure_2> ,
+  <urn:bwyd:keyword:italian> ,
+) .
+
 bwyd:ClosureConsumes(
   <urn:bwyd:pacoid:panna_cotta/closure_2> ,
   <urn:bwyd:pacoid:panna_cotta/closure_1/product/filling> ,
@@ -99,6 +114,23 @@ bwyd:ClosureConsumes(
 bwyd:ClosureProduces(
   <urn:bwyd:pacoid:panna_cotta/closure_2> ,
   <urn:bwyd:pacoid:product:panna_cotta> ,
+) .
+
+
+bwyd:Super(
+  <urn:bwyd:super:dessert> ,
+  "dessert"@en ,
+) .
+
+bwyd:Super(
+  <urn:bwyd:super:pudding> ,
+  "pudding"@en ,
+) .
+
+
+bwyd:Keyword(
+  <urn:bwyd:keyword:italian> ,
+  "italian"@en ,
 ) .
 
 
@@ -112,10 +144,6 @@ bwyd:Product(
   "panna_cotta"@en ,
 ) .
     """.strip()
-
-# need to add programmatically:
-#   rdfs:subClassOf <urn:bwyd:subject:dessert> , <urn:bwyd:subject:pudding> ;
-#   skos:related <urn:bwyd:keyword:italian> ;
 
 
     graph_dir: pathlib.Path = pathlib.Path("../bwyd-editor/graph")
